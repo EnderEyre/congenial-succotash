@@ -97,16 +97,24 @@ explicit shared_ptr (P* pointer) :
     {
         if(m_obj)
             return *m_obj->getObject();
+        return *reinterpret_cast<P*>(0); // dont you dare.
+        /*
+        I could just leave it with warning,
+        or throw exception,
+        but behaviour should be undefined when you dereference nullptr.
+        */
     }
     P *operator->() const noexcept
     {
         if(m_obj)
             return m_obj->getObject();
+        return nullptr;
     }
     P *get() const noexcept
     {
         if(m_obj)
             return m_obj->getObject();
+        return nullptr;
     }
     void reset() noexcept
     {

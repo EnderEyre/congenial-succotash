@@ -9,6 +9,10 @@ struct whatsoever
     int x;
     int y;
     double z;
+    static void print()
+    {
+        std::cout<<"invoked from static function"<<std::endl;
+    }
     friend std::ostream& operator<<(std::ostream &os, const whatsoever &w)
     {
         return os<<w.x<<" "<<w.y<<" "<<w.z;
@@ -51,11 +55,12 @@ int main()
 
         std::cout<<"custom use count "<<custom_copy.use_count()<<" "<<cstm_fr_nptr_cp.use_count()<<std::endl;
         std::cout<<"standard use count"<<standard_copy.use_count()<<" "<<std_from_nptr_cp.use_count()<<std::endl;
-
-
-/*
-        std::cout<<(h.get()==z.get());
-        if(h) std::cout<<"null!"; */
+        whatsoever *another_nullptr = nullptr;
+        std::shared_ptr<whatsoever> standard_pointer(another_nullptr);
+        test::shared_ptr<whatsoever> custom_pointer(another_nullptr);
+        standard_pointer->print();
+        custom_pointer->print();
+        std::cout<<std::boolalpha<<(standard_pointer.get() == custom_pointer.get())<<std::endl;
     }
     {
         test::shared_ptr<std::string> s(new std::string()); // make a pointer
