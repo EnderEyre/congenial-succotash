@@ -91,6 +91,10 @@ int main()
         test::shared_ptr<whatsoever> another(new whatsoever{1,2,3});
         emp = std::move(another);
         std::cout<<*emp<<std::endl;
+        another.reset(new whatsoever{4,5,6});
+        //test swap
+        emp.swap(another);
+        std::cout<<*another<<" "<<*emp<<std::endl;
     }
     std::cin.get();
     return 0;

@@ -38,16 +38,14 @@ class shared_ptr
     } *m_obj;
 
 public:
+    // constructors
     shared_ptr() noexcept : m_obj(nullptr) {}
 
     shared_ptr(std::nullptr_t) noexcept : m_obj(nullptr) { std::cout<<"not useless!"<<std::endl; };
 
 explicit shared_ptr (P* pointer) :
         m_obj(new object_holder(pointer)) {} // may throw bad_alloc
-    ~shared_ptr()
-    {
-        release();
-    }
+
     shared_ptr(const shared_ptr& other) noexcept
     {
         *this = other;
@@ -56,6 +54,12 @@ explicit shared_ptr (P* pointer) :
     {
         *this = std::move(other);
     }
+    // destructor
+    ~shared_ptr()
+    {
+        release();
+    }
+    //operator=
     shared_ptr &operator=(const shared_ptr& other) noexcept
     {
         if(&other == this)
@@ -79,6 +83,8 @@ explicit shared_ptr (P* pointer) :
         return *this;
 
     }
+
+    // Observers
     operator bool() const noexcept
     {
         if (m_obj)
@@ -116,6 +122,9 @@ explicit shared_ptr (P* pointer) :
             return m_obj->getObject();
         return nullptr;
     }
+    // missing operator[], unique(until c++20), owner_before
+
+    // Modifiers
     void reset() noexcept
     {
         *this = shared_ptr();
@@ -123,6 +132,10 @@ explicit shared_ptr (P* pointer) :
     void reset(P* other)
     {
         *this = shared_ptr(other);
+    }
+    void swap (shared_ptr& other) noexcept
+    {
+        std::swap(this->m_obj,other.m_obj);
     }
 
 private:
